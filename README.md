@@ -21,7 +21,7 @@ If you find this project useful, please cite:
 
 ## Requirements
 
-Environment with Python 3.9, PyTorch 2.1.0, and CUDA 12.1 is recommended. Other versions might work, but lower versions might bring a slight performance drop (*e.g.*, when using PyTorch 2.0.1 and CUDA11.8, the AUC@5&deg; on MegaDepth1500 with SuperPoint and RANSAC for relative pose estimation drops ~0.5, from ~50.2 to ~40.7).
+Environment with Python 3.9, PyTorch 2.1.0, and CUDA 12.1 is recommended. Other versions might work, but lower versions might bring a slight performance drop (*e.g.*, when using PyTorch 2.0.1 and CUDA11.8, the AUC@5&deg; on MegaDepth1500 with SuperPoint and RANSAC for relative pose estimation drops ~0.5, from ~50.2 to ~49.7).
 
 All training and testing processes can be performed on at most 2x NVIDIA RTX 3090 GPUs with 24GB of VRAM each.
 
