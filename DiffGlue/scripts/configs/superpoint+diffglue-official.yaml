@@ -1,0 +1,53 @@
+model:
+    name: two_view_pipeline
+    extractor:
+      name: extractors.superpoint
+      max_num_keypoints: 2048
+      detection_threshold: 0.0
+      nms_radius: 3
+    matcher:
+      name: matchers.diffglue
+      features: superpoint
+      depth_confidence: -1
+      width_confidence: -1
+      filter_threshold: 0.1
+      flash: false
+      checkpointed: true
+      n_layers: 9
+      scale: 2
+    diffuser:
+      name: diffusers.diffuser
+      steps: 4096
+      learn_sigma: False
+      sigma_small: False
+      noise_schedule: "linear"
+      use_kl: False
+      predict_xstart: True
+      rescale_timesteps: True
+      rescale_learned_sigmas: True
+      timestep_respacing: ""
+      ddim_steps: 2
+      schedule_sampler: "uniform"
+      use_ddim: True
+      clip_denoised: True
+      diffuser_loss_weight: 1
+      scale: 2
+benchmarks:
+    megadepth1500:
+      data:
+        preprocessing:
+          side: long
+          resize: 1600
+      eval:
+        estimator: opencv
+        ransac_th: 0.5
+    hpatches:
+      eval:
+        estimator: opencv
+        ransac_th: 0.5
+      model:
+        extractor:
+          max_num_keypoints: 1024  # overwrite config above
+
+# python -m scripts.eval.hpatches --conf superpoint+diffglue-official --checkpoint ../demo/models/weights/SP_DiffGlue.tar
+# python -m scripts.eval.megadepth1500 --conf superpoint+diffglue-official --checkpoint ../demo/models/weights/SP_DiffGlue.tar

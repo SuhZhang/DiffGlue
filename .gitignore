@@ -1,3 +1,8 @@
+/demo/models/weights/
+/DiffGlue/data
+/DiffGlue/data/
+/DiffGlue/outputs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

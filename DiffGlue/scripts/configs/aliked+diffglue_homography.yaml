@@ -1,0 +1,71 @@
+data:
+    name: homographies
+    data_dir: revisitop1m
+    train_size: 150000
+    val_size: 2000
+    batch_size: 64
+    num_workers: 16
+    homography:
+        difficulty: 0.7
+        max_angle: 45
+    photometric:
+        name: lg
+model:
+    name: two_view_pipeline
+    extractor:
+        name: extractors.aliked
+        max_num_keypoints: 512
+        detection_threshold: 0.0
+        trainable: False
+    detector:
+        name: null
+    descriptor:
+        name: null
+    ground_truth:
+        name: matchers.homography_matcher
+        th_positive: 3
+        th_negative: 3
+    diffuser:
+        name: diffusers.diffuser
+        steps: 4096
+        learn_sigma: False
+        sigma_small: False
+        noise_schedule: "linear"
+        use_kl: False
+        predict_xstart: True
+        rescale_timesteps: True
+        rescale_learned_sigmas: True
+        timestep_respacing: ""
+        ddim_steps: 2
+        schedule_sampler: "uniform"
+        use_ddim: True
+        clip_denoised: True
+        diffuser_loss_weight: 1000
+        scale: 2
+
+    matcher:
+        name: matchers.diffglue
+        filter_threshold: 0.1
+        flash: false
+        checkpointed: true
+        input_dim: 128
+        n_layers: 9
+        scale: 2
+train:
+    seed: 0
+    epochs: 40
+    log_every_iter: 100
+    eval_every_iter: 500
+    lr: 1e-4
+    lr_schedule:
+        start: 20
+        type: factor
+        on_epoch: true
+        factor: 0.8
+benchmarks:
+    hpatches:
+      eval:
+        estimator: opencv
+        ransac_th: 0.5
+
+# python -m scripts.train ALIKED+DiffGlue_homography --conf scripts/configs/aliked+diffglue_homography.yaml --distributed True --run_benchmarks
